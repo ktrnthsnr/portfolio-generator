@@ -1,15 +1,141 @@
+//require inquirer
 const inquirer = require('inquirer');
 // console.log(inquirer);
+            
 
-inquirer
-.prompt([
-  {
-    type: 'input',
-    name: 'name',
-    message: 'What is your name?'
-  }
-])
-.then(answers => console.log(answers));
+// -- wrap the inquirer.prompt() inside a promptUser function
+
+        // --- profile questions
+
+        const promptUser = () => {
+            return inquirer.prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: 'What is your name?'
+            },
+            {
+                type: 'input',
+                name: 'github',
+                message: 'Enter your GitHub Username'
+            },
+            {
+                type: 'input',
+                name: 'about',
+                message: 'Provide some information about yourself:'
+            }
+            ]);
+        };
+
+        // promptUser().then(answers => console.log(answers));
+        
+        
+        // --- project questions
+            // -- old
+            // const promptProject = () => {
+
+            // -- new
+                //function expression with an array
+                const promptProject = portfolioData => {
+                    // adding the array (If there's no 'projects' array property, create one)
+                    if (!portfolioData.projects) {
+                        portfolioData.projects = [];
+                    }
+                        console.log(`
+                        =================
+                        Add a New Project
+                        =================
+                        `);
+                            return inquirer.prompt([
+                            {
+                                type: 'input',
+                                name: 'name',
+                                message: 'What is the name of your project?'
+                            },
+                            {
+                                type: 'input',
+                                name: 'description',
+                                message: 'Provide a description of the project (Required)'
+                            },
+                            {
+                                type: 'checkbox',
+                                name: 'languages',
+                                message: 'What did you use for this project? (Check all that apply)',
+                                choices: ['JavaScript', 'HTML', 'CSS', 'ES6', 'jQuery', 'Bootstrap', 'Node']
+                            },
+                            {
+                                type: 'input',
+                                name: 'link',
+                                message: 'Enter the GitHub link to your project. (Required)'
+                            },
+                            {
+                                type: 'confirm',
+                                name: 'feature',
+                                message: 'Would you like to feature this project?',
+                                default: false
+                            },
+                            {
+                                type: 'confirm',
+                                name: 'confirmAddProject',
+                                message: 'Would you like to enter another project?',
+                                default: false
+                            }
+                            ])
+                                    .then(projectData => {
+                                        portfolioData.projects.push(projectData);
+                                        if (projectData.confirmAddProject) {
+                                        return promptProject(portfolioData);
+                                        } else {
+                                        return portfolioData;
+                                        }
+                                    });                
+                        };
+
+                       
+        // -- Using multiple promises, chain the functions together using then() methods
+                //new version with array
+                promptUser()
+                .then(promptProject)
+                .then(portfolioData => {
+                    console.log(portfolioData);
+                });
+
+          // -- Using multiple promises, chain the functions together using then() methods
+
+                // promptUser()
+                // .then(answers => console.log(answers))
+                // .then(promptProject)
+                // .then(projectAnswers => console.log(projectAnswers));
+
+        //   promptProject().then(answers => console.log(answers));
+
+
+// -- prev ver: wrap the inquirer.prompt() inside a promptUser function
+        // const promptUser = () => {
+        //     return inquirer.prompt([
+        //       {
+        //         type: 'input',
+        //         name: 'name',
+        //         message: 'What is your name?'
+        //       }
+        //     ]);
+        //   };
+        
+        //   promptUser().then(answers => console.log(answers));
+
+
+// ----   initial prompt test ----- //
+
+        // inquirer
+        // .prompt([
+        // {
+        //     type: 'input',
+        //     name: 'name',
+        //     message: 'What is your name?'
+        // }
+        // ])
+        // .then(answers => console.log(answers));
+
 
 
 
