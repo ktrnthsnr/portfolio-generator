@@ -1,75 +1,46 @@
-//------ array example with 'constant' or 'const' variables  
-
-        const profileDataArgs = process.argv.slice(2, process.argv.length);
-        // console.log(profileDataArgs);
-
-
-// ---- print function, to print them one by one, through the index
-
-        const printProfileData = profileDataArr => {
-            for (let i = 0; i < profileDataArr.length; i += 1) {
-            console.log(profileDataArr[i]);
-            }
-            profileDataArr.forEach(profileItem => console.log(profileItem));        //cleaned up foreach with arrow function
-        };
-
-// ------------ print basic
-
-        printProfileData(profileDataArgs);
-
-// ----------- .forEach() new array method   
-
-        // console.log('================');
-
-        // profileDataArr.forEach(function(profileItem) {
-        //   console.log(profileItem);
-        // });
-
+// -- require the fs module
         
+        const fs = require('fs');
 
+        // to import the generatePages() function add the 'require' of the custom function
+        const generatePage = require('./src/page-template.js');
 
-//------ basic const & print function ----- //
+// --- declare 'the array' which holds the user command-line arguments ---- // 
 
+        //refactored
+        const profileDataArgs = process.argv.slice(2);
 
-        // const printProfileData = profileDataArr => {
-        //     console.log(profileDataArr);
-        //   };
+        // --- goal: extract arguments and store them into distinct variables
+        const [name, github] = profileDataArgs;
 
-        //or with the parentheses
+//moved the generatePage() function to ./src/page-template.js to refactor and to use export\import of a function
+            // // -- the string template, a function with command-line arguments or template literals interpolated into the HTML -- //
 
-        // const printProfileData = (profileDataArr) => {
-        //     console.log(profileDataArr);
-        // }
+            //             const generatePage = (name, github) => {
+            //                 return `
+            //                 <!DOCTYPE html> 
+            //                 <html lang="en"> 
+            //                 <head>
+            //                 <meta charset="UTF-8">
+            //                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            //                 <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            //                 <title>Portfolio Demo</title>
+            //                 </head>
+                        
+            //                 <body>
+            //                 <h1>${name}</h1>
+            //                 <h2><a href="https://github.com/${github}">Github</a></h2>
+            //                 </body>
+            //                 </html>
+            //                 `;
+            //             };  
 
+// --- return the values // fs.writeFile() takes three arguments: the file name, data to write into the file, and the callback function for error handling
 
-        // printProfileData(profileDataArgs);
+            fs.writeFile('./index.html', generatePage(name, github), err => {
+                if (err) throw new Error(err);
+            
+                console.log('Portfolio complete! Check out index.html to see the output!');
+            });
 
-
-//------ array example with 'var' ---------------------/
-
-        // var profileDataArgs = process.argv.slice(2, process.argv.length);
-        // console.log(profileDataArgs);
-
-        // * result:
-        // $ node app.js 'Thisner' 'Web Developer'
-        // [ 'Thisner', 'Web Developer' ]
-
-
-//------ revieiwng the "argv" property of "process" array ---------------------/
-
-        // var commandLineArgs = process.argv;
-        // console.log(commandLineArgs);
-        // console.log(process);
-
-//--------------------------------------------------------------/
-
-        // var message = 'Hello Node!';
-
-        // var sum = 5 + 3;
-
-        // console.log(message);
-        // console.log(sum);
-
-//--------------------------------------------------------------/
-
-        // console.log('Hello Node!');
+  
