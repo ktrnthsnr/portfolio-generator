@@ -46,11 +46,27 @@ const inquirer = require('inquirer');
                         }
                       }
                 },
+
+                //-- added more logic, to confirm in question about yourself
                 {
+                    type: 'confirm',
+                    name: 'confirmAbout',
+                    message: 'Would you like to enter some information about yourself for an "About" section?',
+                    default: true
+                  },
+                  {
                     type: 'input',
                     name: 'about',
-                    message: 'Provide some information about yourself:'
-                }
+                    message: 'Provide some information about yourself:',
+                    when: ({ confirmAbout }) => confirmAbout
+                  }
+                  
+                    //-- prev basic question about yourself
+                    // {
+                    //     type: 'input',
+                    //     name: 'about',
+                    //     message: 'Provide some information about yourself:'
+                    // }
                 ]);
             };
 
@@ -62,9 +78,9 @@ const inquirer = require('inquirer');
             // const promptProject = () => {
 
             // -- new
-                //function expression with an array
+                //--function expression with an array
                 const promptProject = portfolioData => {
-                    // adding the array (If there's no 'projects' array property, create one)
+                    //--adding the array (If there's no 'projects' array property, create one)
                     if (!portfolioData.projects) {
                         portfolioData.projects = [];
                     }
@@ -74,63 +90,66 @@ const inquirer = require('inquirer');
                         =================
                         `);
                             return inquirer.prompt([
-                            {
-                                type: 'input',
-                                name: 'name',
-                                message: 'What is the name of your project?',
-                                validate: nameInput => {
-                                    if (nameInput) {
-                                      return true;
-                                    } else {
-                                      console.log('Please enter your project name.');
-                                      return false;
+                                    {
+                                        type: 'input',
+                                        name: 'name',
+                                        message: 'What is the name of your project?',
+                                        //--validation
+                                        validate: nameInput => {
+                                            if (nameInput) {
+                                            return true;
+                                            } else {
+                                            console.log('Please enter your project name.');
+                                            return false;
+                                            }
+                                        }
+                                    },
+                                    {
+                                        type: 'input',
+                                        name: 'description',
+                                        message: 'Provide a description of the project (Required)',
+                                        //--validation
+                                        validate: nameInput => {
+                                            if (nameInput) {
+                                            return true;
+                                            } else {
+                                            console.log('Please enter a project description!');
+                                            return false;
+                                            }
+                                        }
+                                    },
+                                    {
+                                        type: 'checkbox',
+                                        name: 'languages',
+                                        message: 'What did you use for this project? (Check all that apply)',
+                                        choices: ['JavaScript', 'HTML', 'CSS', 'ES6', 'jQuery', 'Bootstrap', 'Node']
+                                    },
+                                    {
+                                        type: 'input',
+                                        name: 'link',
+                                        message: 'Enter the GitHub link to your project. (Required)',
+                                        //--validation
+                                        validate: nameInput => {
+                                            if (nameInput) {
+                                            return true;
+                                            } else {
+                                            console.log('Please enter the GitHub link to your project!');
+                                            return false;
+                                            }
+                                        }
+                                    },
+                                    {
+                                        type: 'confirm',
+                                        name: 'feature',
+                                        message: 'Would you like to feature this project?',
+                                        default: false
+                                    },
+                                    {
+                                        type: 'confirm',
+                                        name: 'confirmAddProject',
+                                        message: 'Would you like to enter another project?',
+                                        default: false
                                     }
-                                  }
-                            },
-                            {
-                                type: 'input',
-                                name: 'description',
-                                message: 'Provide a description of the project (Required)',
-                                validate: nameInput => {
-                                    if (nameInput) {
-                                      return true;
-                                    } else {
-                                      console.log('Please enter a project description!');
-                                      return false;
-                                    }
-                                  }
-                            },
-                            {
-                                type: 'checkbox',
-                                name: 'languages',
-                                message: 'What did you use for this project? (Check all that apply)',
-                                choices: ['JavaScript', 'HTML', 'CSS', 'ES6', 'jQuery', 'Bootstrap', 'Node']
-                            },
-                            {
-                                type: 'input',
-                                name: 'link',
-                                message: 'Enter the GitHub link to your project. (Required)',
-                                validate: nameInput => {
-                                    if (nameInput) {
-                                      return true;
-                                    } else {
-                                      console.log('Please enter the GitHub link to your project!');
-                                      return false;
-                                    }
-                                  }
-                            },
-                            {
-                                type: 'confirm',
-                                name: 'feature',
-                                message: 'Would you like to feature this project?',
-                                default: false
-                            },
-                            {
-                                type: 'confirm',
-                                name: 'confirmAddProject',
-                                message: 'Would you like to enter another project?',
-                                default: false
-                            }
                             ])
                                     .then(projectData => {
                                         portfolioData.projects.push(projectData);
@@ -140,7 +159,7 @@ const inquirer = require('inquirer');
                                         return portfolioData;
                                         }
                                     });                
-                        };
+                };
 
                        
         // -- Using multiple promises, chain the functions together using then() methods
