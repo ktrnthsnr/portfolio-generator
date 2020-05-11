@@ -5,8 +5,15 @@ const inquirer = require('inquirer');
 //added back
 const generatePage = require('./src/page-template');
 
-// added back, used when writing the HTML template to an index.html file 
-const fs = require('fs');
+
+
+// // added back, used when writing the HTML template to an index.html file 
+// const fs = require('fs');
+
+    // replace with
+    // const generateSite = require('./utils/generate-site.js');
+        // updated
+        const { writeFile, copyFile } = require('./utils/generate-site.js');
             
 
 // -- wrap the inquirer.prompt() inside a promptUser function
@@ -167,31 +174,73 @@ const fs = require('fs');
                                     });                
                 };
 
+// -- updated - promptUser code --  update the Inquirer prompt Promise chain -- 
 
-        // -- updated promptUser()
-                promptUser()
-                .then(promptProject)
-                .then(portfolioData => {
-                       const pageHTML = generatePage(portfolioData);
-                       
-                    //this part will write the HTML template to an index.html file ( + remember to add require statement at top)
-                            // add this to the top: const fs = require('fs');
-                            fs.writeFile('./dist/index.html', pageHTML, err => {
-                                if (err) {
-                                  console.log(err);
-                                  return;
-                                }
-                                console.log('Page created! Check out index.html in this directory to see it!');
-                              
-                                fs.copyFile('./src/style.css', './dist/style.css', err => {
-                                  if (err) {
-                                    console.log(err);
-                                    return;
-                                  }
-                                  console.log('Style sheet copied successfully!');
-                                });
-                              });
-                });
+            promptUser()
+            .then(promptProject)
+            .then(portfolioData => {
+            return generatePage(portfolioData);
+            })
+            .then(pageHTML => {
+            return writeFile(pageHTML);
+            })
+            .then(writeFileResponse => {
+            console.log(writeFileResponse);
+            return copyFile();
+            })
+            .then(copyFileResponse => {
+            console.log(copyFileResponse);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+
+            // // --- refactored promptUser() -------------------- //
+
+            //             promptUser()
+            //             .then(promptProject)
+            //             .then(portfolioData => {
+            //                 return generatePage(portfolioData);
+            //             })
+            //             .then(pageHTML => {
+            //                 return writeFile(pageHTML);
+            //             })
+            //             .then(writeFileResponse => {
+            //                 console.log(writeFileResponse);
+            //                 return copyFile();
+            //             })
+            //             .then(copyFileResponse => {
+            //                 console.log(copyFileResponse);
+            //             })
+            //             .catch(err => {
+            //                 console.log(err);
+            //             });
+
+                    // ---- previous:  updated promptUser() ------------------------- //
+
+                                // promptUser()
+                                // .then(promptProject)
+                                // .then(portfolioData => {
+                                //        const pageHTML = generatePage(portfolioData);
+                                    
+                                //     // --this part will write the HTML template to an index.html file ( + remember to add require statement at top)
+                                //             // -- add this to the top: const fs = require('fs');
+                                //             fs.writeFile('./dist/index.html', pageHTML, err => {
+                                //                 if (err) {
+                                //                   console.log(err);
+                                //                   return;
+                                //                 }
+                                //                 console.log('Page created! Check out index.html in this directory to see it!');
+                                            
+                                //                 fs.copyFile('./src/style.css', './dist/style.css', err => {
+                                //                   if (err) {
+                                //                     console.log(err);
+                                //                     return;
+                                //                   }
+                                //                   console.log('Style sheet copied successfully!');
+                                //                 });
+                                //               });
+                                // });
 
                        
         // -- Using multiple promises, chain the functions together using then() methods
