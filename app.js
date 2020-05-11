@@ -1,6 +1,12 @@
 //require inquirer
 const inquirer = require('inquirer');
 // console.log(inquirer);
+
+//added back
+const generatePage = require('./src/page-template');
+
+// added back, used when writing the HTML template to an index.html file 
+const fs = require('fs');
             
 
 // -- wrap the inquirer.prompt() inside a promptUser function
@@ -60,7 +66,7 @@ const inquirer = require('inquirer');
                     message: 'Provide some information about yourself:',
                     when: ({ confirmAbout }) => confirmAbout
                   }
-                  
+
                     //-- prev basic question about yourself
                     // {
                     //     type: 'input',
@@ -161,14 +167,30 @@ const inquirer = require('inquirer');
                                     });                
                 };
 
-                       
-        // -- Using multiple promises, chain the functions together using then() methods
-                //new version with array
+
+        // -- updated promptUser()
                 promptUser()
                 .then(promptProject)
                 .then(portfolioData => {
-                    console.log(portfolioData);
+                       const pageHTML = generatePage(portfolioData);
+                       
+                    //this part will write the HTML template to an index.html file ( + remember to add require statement at top)
+                            // add this to the top: const fs = require('fs');
+                    fs.writeFile('./index.html', pageHTML, err => {
+                      if (err) throw new Error(err);
+
+                      console.log('Page created! Check out index.html in this directory to see it!');
+                    });
                 });
+
+                       
+        // -- Using multiple promises, chain the functions together using then() methods
+                //--new version with array
+                    // promptUser()
+                    // .then(promptProject)
+                    // .then(portfolioData => {
+                    //     console.log(portfolioData);
+                    // });
 
           // -- Using multiple promises, chain the functions together using then() methods
 
