@@ -1,29 +1,40 @@
-//require inquirer
+// ------------------------------------------------------------- //
+
+// gitprofile:  ktrnthsnr       date: May 10th 2020
+// assignment:  module 9 Node.js    repo: portfolio-generator
+// ------------------------------------------------------------- //
+// this file:   apps.js     
+// outputs:     index.html
+// usage:       run in terminal: $ node app.js
+// page contains:
+// ------------------------------------------------------------- //
+        // 1. the requires
+        //     a. require for npm inquirer 
+        //     b. require for generatePage   >  page-template.js
+        //     c. require for writeFile and copyFile  >  generate-site.js
+        // ------------------------------------------------------ //
+        // 2. the functions    
+        //     a. promptUser() with questions
+        //     b. promptProject() with questions
+        // ------------------------------------------------------ //
+        // 3. the inits
+        //     a. promptUser     
+        //     b.    w/ nested promptProject
+        //                      > returns generatePage()   >  creates HTML template
+        //                      > writeFile, copyFile >  moves >  index.html & style.css to /dist folder
+
+// ------------------------------------------------------------- //
+
+// -- requires
 const inquirer = require('inquirer');
-// console.log(inquirer);
-
-//added back
 const generatePage = require('./src/page-template');
-
-
-
-// // added back, used when writing the HTML template to an index.html file 
-// const fs = require('fs');
-
-    // replace with
-    // const generateSite = require('./utils/generate-site.js');
-        // updated
-        const { writeFile, copyFile } = require('./utils/generate-site.js');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
             
-
-// -- wrap the inquirer.prompt() inside a promptUser function
-
-        // --- profile questions
-
+// --- user profile questions
+        // -- wrap the inquirer.prompt() inside a promptUser function
         const promptUser = () => {
             return inquirer.prompt([
-
-                //first question, with validation
+                //first question
                 {
                     type: 'input',
                     name: 'name',
@@ -37,14 +48,7 @@ const generatePage = require('./src/page-template');
                         return false;
                       }
                     }
-                  },
-                            //-- basic first question
-                            // {
-                            //     type: 'input',
-                            //     name: 'name',
-                            //     message: 'What is your name?'
-                            // },
-                
+                  },                                        
                  //second question
                 {
                     type: 'input',
@@ -59,8 +63,7 @@ const generatePage = require('./src/page-template');
                         }
                       }
                 },
-
-                //-- added more logic, to confirm in question about yourself
+                //-- added more logic, to confirm
                 {
                     type: 'confirm',
                     name: 'confirmAbout',
@@ -73,27 +76,14 @@ const generatePage = require('./src/page-template');
                     message: 'Provide some information about yourself:',
                     when: ({ confirmAbout }) => confirmAbout
                   }
-
-                    //-- prev basic question about yourself
-                    // {
-                    //     type: 'input',
-                    //     name: 'about',
-                    //     message: 'Provide some information about yourself:'
-                    // }
                 ]);
             };
 
-        // promptUser().then(answers => console.log(answers));
-        
-        
-        // --- project questions
-            // -- old
-            // const promptProject = () => {
-
-            // -- new
-                //--function expression with an array
+      
+// -- project questions 
+                //-- wrap the inquirer.prompt() inside a promptProject function, function expression with an array
                 const promptProject = portfolioData => {
-                    //--adding the array (If there's no 'projects' array property, create one)
+                    //-- adding the array (If there's no 'projects' array property, create one)
                     if (!portfolioData.projects) {
                         portfolioData.projects = [];
                     }
@@ -174,8 +164,9 @@ const generatePage = require('./src/page-template');
                                     });                
                 };
 
-// -- updated - promptUser code --  update the Inquirer prompt Promise chain -- 
-
+// -- init function to call the promptUser() function --  update the Inquirer prompt Promise chain -- 
+            // -- nests the promptProject within
+                    // -- return's generatePage 
             promptUser()
             .then(promptProject)
             .then(portfolioData => {
@@ -194,112 +185,3 @@ const generatePage = require('./src/page-template');
             .catch(err => {
             console.log(err);
             });
-
-            // // --- refactored promptUser() -------------------- //
-
-            //             promptUser()
-            //             .then(promptProject)
-            //             .then(portfolioData => {
-            //                 return generatePage(portfolioData);
-            //             })
-            //             .then(pageHTML => {
-            //                 return writeFile(pageHTML);
-            //             })
-            //             .then(writeFileResponse => {
-            //                 console.log(writeFileResponse);
-            //                 return copyFile();
-            //             })
-            //             .then(copyFileResponse => {
-            //                 console.log(copyFileResponse);
-            //             })
-            //             .catch(err => {
-            //                 console.log(err);
-            //             });
-
-                    // ---- previous:  updated promptUser() ------------------------- //
-
-                                // promptUser()
-                                // .then(promptProject)
-                                // .then(portfolioData => {
-                                //        const pageHTML = generatePage(portfolioData);
-                                    
-                                //     // --this part will write the HTML template to an index.html file ( + remember to add require statement at top)
-                                //             // -- add this to the top: const fs = require('fs');
-                                //             fs.writeFile('./dist/index.html', pageHTML, err => {
-                                //                 if (err) {
-                                //                   console.log(err);
-                                //                   return;
-                                //                 }
-                                //                 console.log('Page created! Check out index.html in this directory to see it!');
-                                            
-                                //                 fs.copyFile('./src/style.css', './dist/style.css', err => {
-                                //                   if (err) {
-                                //                     console.log(err);
-                                //                     return;
-                                //                   }
-                                //                   console.log('Style sheet copied successfully!');
-                                //                 });
-                                //               });
-                                // });
-
-                       
-        // -- Using multiple promises, chain the functions together using then() methods
-                //--new version with array
-                    // promptUser()
-                    // .then(promptProject)
-                    // .then(portfolioData => {
-                    //     console.log(portfolioData);
-                    // });
-
-          // -- Using multiple promises, chain the functions together using then() methods
-
-                // promptUser()
-                // .then(answers => console.log(answers))
-                // .then(promptProject)
-                // .then(projectAnswers => console.log(projectAnswers));
-
-        //   promptProject().then(answers => console.log(answers));
-
-
-// -- prev ver: wrap the inquirer.prompt() inside a promptUser function
-        // const promptUser = () => {
-        //     return inquirer.prompt([
-        //       {
-        //         type: 'input',
-        //         name: 'name',
-        //         message: 'What is your name?'
-        //       }
-        //     ]);
-        //   };
-        
-        //   promptUser().then(answers => console.log(answers));
-
-
-// ----   initial prompt test ----- //
-
-        // inquirer
-        // .prompt([
-        // {
-        //     type: 'input',
-        //     name: 'name',
-        //     message: 'What is your name?'
-        // }
-        // ])
-        // .then(answers => console.log(answers));
-
-
-
-
-// -- backup
-
-        // const fs = require('fs');
-        // const generatePage = require('./src');
-        //...
-
-        // const pageHTML = generatePage(portfolioData);
-
-        // fs.writeFile('./index.html', pageHTML, err => {
-        //   if (err) throw new Error(err);
-
-        //   console.log('Portfolio complete! Check out index.html to see the output!');
-        // });

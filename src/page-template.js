@@ -1,4 +1,23 @@
- // ----   HTML template for About section ---  create generate About function  ------  //
+// ------------------------------------------------------------- //
+
+// gitprofile:      ktrnthsnr       date: may 10th 2020
+// assignment:  module 9 Node.js    repo: portfolio-generator
+// ------------------------------------------------------------- //
+// this file:   page-template.js
+// page contains:
+// ------------------------------------------------------------- //
+        // 1. the functions 
+        //     a. generateAbout() to create HTML About section
+        //     b. generateProjects() to create HTML Projects section
+        // ------------------------------------------------------ //
+        // 2. module export & function
+        //     a. templateData array > to export the HTML framework template
+        //            1) nested with generateAbout() array into an HTML template literal
+        //            2) nested with generateProjects() array into an HTML template literal
+
+// ----------------------------------------------------------------------------------------------- //
+
+// ----   HTML template for About section ---  create generate About function  ------  //
 
         const generateAbout = aboutText => {
             if (!aboutText) {
@@ -13,65 +32,56 @@
             </section>
             `;
         };
-            //-- then execute this generateAbout() function by adding this piece between the main tags below,
-                    // ${generateAbout(about)}
+           
 
+// ------ HTML template for Projects --- create generate project function 
 
-// ------ HTML template for projects --- create generate project function 
-    //-- w/map array 
-            //-- w/filter method for when user confirms if featured or not
-                // -- refactored and added implicit returns for arrow functions
-
-                const generateProjects = projectsArr => {
+      const generateProjects = projectsArr => {
+            return `
+              <section class="my-3" id="portfolio">
+                <h2 class="text-dark bg-primary p-2 display-inline-block">Work</h2>
+                <div class="flex-row justify-space-between">
+                ${projectsArr
+                  .filter(({ feature }) => feature)
+                  .map(({ name, description, languages, link }) => {
                     return `
-                      <section class="my-3" id="portfolio">
-                        <h2 class="text-dark bg-primary p-2 display-inline-block">Work</h2>
-                        <div class="flex-row justify-space-between">
-                        ${projectsArr
-                          .filter(({ feature }) => feature)
-                          .map(({ name, description, languages, link }) => {
-                            return `
-                            <div class="col-12 mb-2 bg-dark text-light p-3">
-                              <h3 class="portfolio-item-title text-light">${name}</h3>
-                              <h5 class="portfolio-languages">
-                                Built With:
-                                ${languages.join(', ')}
-                              </h5>
-                              <p>${description}</p>
-                              <a href="${link}" class="btn"><i class="fab fa-github mr-2"></i>View Project on GitHub</a>
-                            </div>
-                          `;
-                          })
-                          .join('')}
-                  
-                        ${projectsArr
-                          .filter(({ feature }) => !feature)
-                          .map(({ name, description, languages, link }) => {
-                            return `
-                            <div class="col-12 col-md-6 mb-2 bg-dark text-light p-3 flex-column">
-                              <h3 class="portfolio-item-title text-light">${name}</h3>
-                              <h5 class="portfolio-languages">
-                                Built With:
-                                ${languages.join(', ')}
-                              </h5>
-                              <p>${description}</p>
-                              <a href="${link}" class="btn mt-auto"><i class="fab fa-github mr-2"></i>View Project on GitHub</a>
-                            </div>
-                          `;
-                          })
-                          .join('')}
-                        </div>
-                      </section>
-                    `;
-                  };
+                    <div class="col-12 mb-2 bg-dark text-light p-3">
+                      <h3 class="portfolio-item-title text-light">${name}</h3>
+                      <h5 class="portfolio-languages">
+                        Built With:
+                        ${languages.join(', ')}
+                      </h5>
+                      <p>${description}</p>
+                      <a href="${link}" class="btn"><i class="fab fa-github mr-2"></i>View Project on GitHub</a>
+                    </div>
+                  `;
+                  })
+                  .join('')}
+          
+                ${projectsArr
+                  .filter(({ feature }) => !feature)
+                  .map(({ name, description, languages, link }) => {
+                    return `
+                    <div class="col-12 col-md-6 mb-2 bg-dark text-light p-3 flex-column">
+                      <h3 class="portfolio-item-title text-light">${name}</h3>
+                      <h5 class="portfolio-languages">
+                        Built With:
+                        ${languages.join(', ')}
+                      </h5>
+                      <p>${description}</p>
+                      <a href="${link}" class="btn mt-auto"><i class="fab fa-github mr-2"></i>View Project on GitHub</a>
+                    </div>
+                  `;
+                  })
+                  .join('')}
+                </div>
+              </section>
+            `;
+      };
 
-               //-- then execute this generateProjects() function by adding in the main section after the About template literal 
-                    // ${generateProjects(projects)}
-
-// -- HTML template ----- framework for index.html -----  //
+// -- HTML template ----- framework for index.html w/ About and Projects nested in HTML  -----  //
 
         module.exports = templateData => {
-            // destructure page data by section
             const { projects, about, ...header } = templateData;
         
             return `
