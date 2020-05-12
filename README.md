@@ -28,10 +28,13 @@ Exercise in creating a command-line based app which processes user input using N
 * npm Inquirer
 
 
-## Site and Repo location
+## Repo location
 
 * GitHub file repo
 https://github.com/ktrnthsnr/portfolio-generator/
+
+## Example of HTML output
+https://ktrnthsnr.github.io/portfolio-generator
 
 ## Contribution
 ktrnthsnr
